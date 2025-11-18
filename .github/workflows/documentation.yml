@@ -2,23 +2,24 @@ name: Documentation Deployment
 
 on:
   push:
-    paths:
-      - "docs/**"
+    branches: [main]
 
 jobs:
-  deploy-docs:
+  docs-build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Build Docs
+      - name: Build documentation
         run: |
-          mkdir -p docs-out
-          cp -r docs/* docs-out/
+          echo "Generating documentation..."
+          mkdir -p docs-output
+          echo "<h1>Project Docs</h1>" > docs-output/index.html
 
-      - name: Deploy Docs
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs-out
+          name: documentation
+          path: docs-output/
