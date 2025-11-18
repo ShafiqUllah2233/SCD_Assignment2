@@ -1,0 +1,24 @@
+name: Documentation Deployment
+
+on:
+  push:
+    paths:
+      - "docs/**"
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docs
+        run: |
+          mkdir -p docs-out
+          cp -r docs/* docs-out/
+
+      - name: Deploy Docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs-out
